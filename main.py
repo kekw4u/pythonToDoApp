@@ -41,3 +41,27 @@ def add_todo(path_todo, new_todo):
             indent=4,
             ensure_ascii=False,
         )
+
+
+def remove_todo(path_todo, index):
+    with open(path_todo, 'r') as todo_file:
+        data = json.load(todo_file)
+    name = data["name"]
+    todos = data["todos"]
+
+    todos.remove(todos[index])
+
+    new_data = {
+        "name": name,
+        "todos": todos,
+    }
+
+    with open(path_todo, "w", encoding='utf-8') as todo_file:
+        json.dump(
+            new_data,
+            todo_file,
+            sort_keys=True,
+            indent=4,
+            ensure_ascii=False,
+        )
+    
