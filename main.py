@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
 
 def create_todo_list(path_todo, todo_name):
-    with open(path_todo, "w") as todo_file:
+    with open(path_todo, "w", encoding='utf-8') as todo_file:
         json.dump(
             {"name": todo_name},
             todo_file,
@@ -20,7 +20,7 @@ def create_todo_list(path_todo, todo_name):
 
 
 def add_todo(path_todo, new_todo):
-    with open(path_todo, 'r') as todo_file:
+    with open(path_todo, 'r', encoding='utf-8') as todo_file:
         data = json.load(todo_file)
 
     name = data["name"]
@@ -33,18 +33,11 @@ def add_todo(path_todo, new_todo):
         "todos": todos,
     }
 
-    with open(path_todo, "w", encoding='utf-8') as todo_file:
-        json.dump(
-            new_data,
-            todo_file,
-            sort_keys=True,
-            indent=4,
-            ensure_ascii=False,
-        )
+    update_todo(path_todo, new_data)
 
 
 def remove_todo(path_todo, index):
-    with open(path_todo, 'r') as todo_file:
+    with open(path_todo, 'r', encoding='utf-8') as todo_file:
         data = json.load(todo_file)
     name = data["name"]
     todos = data["todos"]
@@ -56,6 +49,10 @@ def remove_todo(path_todo, index):
         "todos": todos,
     }
 
+    update_todo(path_todo, new_data)
+
+
+def update_todo(path_todo, new_data):
     with open(path_todo, "w", encoding='utf-8') as todo_file:
         json.dump(
             new_data,
@@ -64,4 +61,3 @@ def remove_todo(path_todo, index):
             indent=4,
             ensure_ascii=False,
         )
-    
