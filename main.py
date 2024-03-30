@@ -23,7 +23,6 @@ class TodoJournal:
 
         Args:
             path_todo(str): Путь до файла с туду листом
-            name(str): Название туду листа
 
         Returns:
         """
@@ -130,4 +129,15 @@ class TodoJournal:
             print(f"Данный путь некорректен: {self.path_todo}")
             sys.exit(1)
 
+    def __len__(self):
+        return len(self.entries)
 
+    def __getitem__(self, item):
+        try:
+            return self.entries[item]
+        except TypeError:
+            print("Туду с таким индексом не существует!")
+            sys.exit(1)
+        except IndexError:
+            print("Туду с таким индексом не существует!")
+            sys.exit(1)
