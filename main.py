@@ -36,19 +36,22 @@ class TodoJournal:
             print(f"Данный путь некорректен: {path_todo}")
             sys.exit(1)
 
-
     def create(self) -> None:
         """Создаёт файл с заданными json-параметрами"""
-        with open(self.path_todo, "w", encoding='utf-8') as todo_file:
-            json.dump(
-                {"name": self.name, "todos": []},
-                todo_file,
-                sort_keys=True,
-                indent=4,
-                ensure_ascii=False,
-            )
+        try:
+            with open(self.path_todo, "w", encoding='utf-8') as todo_file:
+                json.dump(
+                    {"name": self.name, "todos": []},
+                    todo_file,
+                    sort_keys=True,
+                    indent=4,
+                    ensure_ascii=False,
+                )
+        except FileNotFoundError as error:
+            print(f"Данный путь некорректен: {self.path_todo}")
+            sys.exit(1)
 
-    def add_entry(self, new_entry: dict) -> None:
+    def add_entry(self, new_entry: str) -> None:
         """Добавляет новую тудушку в существующий туду лист
 
         Args:
@@ -102,14 +105,19 @@ class TodoJournal:
         Returns:
 
         """
-        with open(self.path_todo, "w", encoding='utf-8') as todo_file:
-            json.dump(
-                new_data,
-                todo_file,
-                sort_keys=True,
-                indent=4,
-                ensure_ascii=False,
-            )
+        try:
+            with open(self.path_todo, "w", encoding='utf-8') as todo_file:
+                json.dump(
+                    new_data,
+                    todo_file,
+                    sort_keys=True,
+                    indent=4,
+                    ensure_ascii=False,
+                )
+
+        except FileNotFoundError as error:
+            print(f"Данный путь некорректен: {self.path_todo}")
+            sys.exit(1)
 
     def _parse(self) -> dict:
         """Получает данные из туду листа
@@ -117,7 +125,10 @@ class TodoJournal:
         Returns:
             dict: Данные, полученные из файла(Туду листа)
         """
-        with open(self.path_todo, 'r', encoding='utf-8') as todo_file:
-            data = json.load(todo_file)
-        return data
-
+        try:
+            with open(self.path_todo, 'r', encoding='utf-8') as todo_file:
+                data = json.load(todo_file)
+            return data
+        except FileNotFoundError as error:
+            print(f"Данный путь некорректен: {self.path_todo}")
+            sys.exit(1)
