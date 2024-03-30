@@ -28,11 +28,11 @@ class TodoJournal:
         Returns:
         """
         try:
-            file = open(path_todo)
-            self.path_todo = path_todo
-            self.name = name
+            with open(path_todo, 'r', encoding='utf-8') as file:
+                self.path_todo = path_todo
+                self.name = name
             file.close()
-        except FileNotFoundError as error:
+        except FileNotFoundError:
             print(f"Данный путь некорректен: {path_todo}")
             sys.exit(1)
 
@@ -47,7 +47,7 @@ class TodoJournal:
                     indent=4,
                     ensure_ascii=False,
                 )
-        except FileNotFoundError as error:
+        except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
             sys.exit(1)
 
@@ -115,7 +115,7 @@ class TodoJournal:
                     ensure_ascii=False,
                 )
 
-        except FileNotFoundError as error:
+        except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
             sys.exit(1)
 
@@ -129,6 +129,6 @@ class TodoJournal:
             with open(self.path_todo, 'r', encoding='utf-8') as todo_file:
                 data = json.load(todo_file)
             return data
-        except FileNotFoundError as error:
+        except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
             sys.exit(1)
