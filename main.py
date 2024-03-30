@@ -18,7 +18,7 @@ class TodoJournal:
         name(str): Название туду листа
     """
 
-    def __init__(self, path_todo: str, name: str):
+    def __init__(self, path_todo: str):
         """Конструктор класса: создаёт объект с заданными аттрибутами
 
         Args:
@@ -27,28 +27,25 @@ class TodoJournal:
 
         Returns:
         """
-        try:
-            with open(path_todo, 'r', encoding='utf-8') as file:
-                self.path_todo = path_todo
-                self.name = name
-            file.close()
-        except FileNotFoundError:
-            print(f"Данный путь некорректен: {path_todo}")
-            sys.exit(1)
+        self.path_todo = path_todo
+        todo_data = self._parse()
+        self.name = todo_data['name']
+        self.entries = todo_data['todos']
 
-    def create(self) -> None:
+    @staticmethod
+    def create(filename, name) -> None:
         """Создаёт файл с заданными json-параметрами"""
         try:
-            with open(self.path_todo, "w", encoding='utf-8') as todo_file:
+            with open(filename, "w", encoding='utf-8') as todo_file:
                 json.dump(
-                    {"name": self.name, "todos": []},
+                    {"name": name, "todos": []},
                     todo_file,
                     sort_keys=True,
                     indent=4,
                     ensure_ascii=False,
                 )
         except FileNotFoundError:
-            print(f"Данный путь некорректен: {self.path_todo}")
+            print(f"Данный путь некорректен: {filename}")
             sys.exit(1)
 
     def add_entry(self, new_entry: str) -> None:
@@ -132,3 +129,5 @@ class TodoJournal:
         except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
             sys.exit(1)
+
+
