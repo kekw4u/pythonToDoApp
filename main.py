@@ -6,18 +6,7 @@ Todo:
 """
 
 import json
-
-
-def main() -> None:
-    """
-    Returns:
-        None: Ничего не возвращаем
-    """
-    print("Hello, World!")
-
-
-if __name__ == '__main__':
-    main()
+import sys
 
 
 class TodoJournal:
@@ -38,8 +27,15 @@ class TodoJournal:
 
         Returns:
         """
-        self.path_todo = path_todo
-        self.name = name
+        try:
+            file = open(path_todo)
+            self.path_todo = path_todo
+            self.name = name
+            file.close()
+        except FileNotFoundError as error:
+            print(f"Данный путь некорректен: {path_todo}")
+            sys.exit(1)
+
 
     def create(self) -> None:
         """Создаёт файл с заданными json-параметрами"""
@@ -52,7 +48,7 @@ class TodoJournal:
                 ensure_ascii=False,
             )
 
-    def add_entry(self, new_entry) -> None:
+    def add_entry(self, new_entry: dict) -> None:
         """Добавляет новую тудушку в существующий туду лист
 
         Args:
@@ -124,3 +120,4 @@ class TodoJournal:
         with open(self.path_todo, 'r', encoding='utf-8') as todo_file:
             data = json.load(todo_file)
         return data
+
