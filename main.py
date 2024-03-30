@@ -1,7 +1,7 @@
 """                 Приложение ToDoList
 
 Todo:
-    * Сюда пишем то, что надо сделать в последующем
+    * Обработать исключение, если в метод удаления тудушки подаётся недопустимый индекс
 
 """
 
@@ -45,6 +45,9 @@ class TodoJournal:
                 )
         except FileNotFoundError:
             print(f"Данный путь некорректен: {filename}")
+        except PermissionError:
+            print(f"У вас нет прав на запись этого файла: {filename}")
+        finally:
             sys.exit(1)
 
     def add_entry(self, new_entry: str) -> None:
@@ -113,6 +116,9 @@ class TodoJournal:
 
         except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
+        except PermissionError:
+            print(f"У вас нет прав на запись этого файла: {self.path_todo}")
+        finally:
             sys.exit(1)
 
     def _parse(self) -> dict:
@@ -127,6 +133,9 @@ class TodoJournal:
             return data
         except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
+        except PermissionError:
+            print(f"У вас нет прав на чтение этого файла: {self.path_todo}")
+        finally:
             sys.exit(1)
 
     def __len__(self):
@@ -137,7 +146,7 @@ class TodoJournal:
             return self.entries[item]
         except TypeError:
             print("Туду с таким индексом не существует!")
-            sys.exit(1)
         except IndexError:
             print("Туду с таким индексом не существует!")
+        finally:
             sys.exit(1)
