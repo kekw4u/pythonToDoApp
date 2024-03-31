@@ -155,5 +155,9 @@ class TodoJournal:
 
     def __next__(self):
         x = self.i
-        self.i = next(self.i)
+        try:
+            next(self.i)
+        except StopIteration:
+            print("Выход за пределы листа!")
+            sys.exit(1)
         return x
