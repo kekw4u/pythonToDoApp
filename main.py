@@ -8,6 +8,8 @@ Todo:
 import json
 import sys
 
+class ToDoNotFoundError(Exception):
+    pass
 
 class TodoJournal:
     """
@@ -23,14 +25,11 @@ class TodoJournal:
 
         Args:
             path_todo(str): Путь до файла с туду листом
-
-        Returns:
         """
         self.path_todo = path_todo
         todo_data = self._parse()
         self.name = todo_data['name']
         self.entries = todo_data['todos']
-        self.i = iter(self.entries)
 
     @staticmethod
     def create(filename, name) -> None:
@@ -56,8 +55,6 @@ class TodoJournal:
 
         Args:
             new_entry(str): Туду, который будет добавлен
-
-        Returns:
 
         """
         data = self._parse()
@@ -142,22 +139,11 @@ class TodoJournal:
     def __getitem__(self, item):
         try:
             return self.entries[item]
-        except TypeError:
-            print("Туду с таким индексом не существует!")
-            sys.exit(1)
-        except IndexError:
-            print("Туду с таким индексом не существует!")
-            sys.exit(1)
+        except (TypeError, IndexError) as error:
+            raise ToDoNotFoundError("Туду с таким индексом не существует!") from error
 
     def __iter__(self):
-        self.i = iter(self.entries)
-        return self.i
+        return iter(self.entries)
 
     def __next__(self):
-        x = self.i
-        try:
-            next(self.i)
-        except StopIteration:
-            print("Выход за пределы листа!")
-            sys.exit(1)
-        return x
+        return next(self)
