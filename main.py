@@ -30,6 +30,7 @@ class TodoJournal:
         todo_data = self._parse()
         self.name = todo_data['name']
         self.entries = todo_data['todos']
+        self.i = iter(self.entries)
 
     @staticmethod
     def create(filename, name) -> None:
@@ -45,9 +46,9 @@ class TodoJournal:
                 )
         except FileNotFoundError:
             print(f"Данный путь некорректен: {filename}")
+            sys.exit(1)
         except PermissionError:
             print(f"У вас нет прав на запись этого файла: {filename}")
-        finally:
             sys.exit(1)
 
     def add_entry(self, new_entry: str) -> None:
@@ -83,8 +84,8 @@ class TodoJournal:
 
         """
         data = self._parse()
-        name = data["name"]
-        todos = data["todos"]
+        name = data['name']
+        todos = data['todos']
 
         todos.remove(todos[index])
 
@@ -100,9 +101,6 @@ class TodoJournal:
 
         Args:
             new_data(dict): Список Тудушек
-
-        Returns:
-
         """
         try:
             with open(self.path_todo, "w", encoding='utf-8') as todo_file:
@@ -116,16 +114,16 @@ class TodoJournal:
 
         except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
+            sys.exit(1)
         except PermissionError:
             print(f"У вас нет прав на запись этого файла: {self.path_todo}")
-        finally:
             sys.exit(1)
 
-    def _parse(self) -> dict:
+    def _parse(self) -> list:
         """Получает данные из туду листа
 
         Returns:
-            dict: Данные, полученные из файла(Туду листа)
+            list: Данные, полученные из файла(Туду листа)
         """
         try:
             with open(self.path_todo, 'r', encoding='utf-8') as todo_file:
@@ -133,9 +131,9 @@ class TodoJournal:
             return data
         except FileNotFoundError:
             print(f"Данный путь некорректен: {self.path_todo}")
+            sys.exit(1)
         except PermissionError:
             print(f"У вас нет прав на чтение этого файла: {self.path_todo}")
-        finally:
             sys.exit(1)
 
     def __len__(self):
@@ -146,7 +144,16 @@ class TodoJournal:
             return self.entries[item]
         except TypeError:
             print("Туду с таким индексом не существует!")
+            sys.exit(1)
         except IndexError:
             print("Туду с таким индексом не существует!")
-        finally:
             sys.exit(1)
+
+    def __iter__(self):
+        self.i = iter(self.entries)
+        return self.i
+
+    def __next__(self):
+        x = self.i
+        self.i = next(self.i)
+        return x
