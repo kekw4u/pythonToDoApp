@@ -8,8 +8,13 @@ Todo:
 import json
 import sys
 
+
 class ToDoNotFoundError(Exception):
+    """
+    Класс Ошибки индексирования
+    """
     pass
+
 
 class TodoJournal:
     """
@@ -57,18 +62,11 @@ class TodoJournal:
             new_entry(str): Туду, который будет добавлен
 
         """
-        data = self._parse()
-
-        name = data["name"]
-        todos = data["todos"]
-
-        todos.append(new_entry)
-
+        self.entries.append(new_entry)
         new_data = {
-            "name": name,
-            "todos": todos,
+            "name": self.name,
+            "todos": self.entries,
         }
-
         self._update(new_data)
 
     def remove_entry(self, index: int) -> None:
@@ -76,21 +74,16 @@ class TodoJournal:
 
         Args:
             index(int): Номер тудушки, которая будет удалена
-
-        Returns:
-
         """
-        data = self._parse()
-        name = data['name']
-        todos = data['todos']
-
-        todos.remove(todos[index])
-
+        try:
+            del self.entries[index]
+        except (IndexError, TypeError):
+            print("Туду с заданным индексом не существует!")
+            return
         new_data = {
-            "name": name,
-            "todos": todos,
+            "name": self.name,
+            "todos": self.entries,
         }
-
         self._update(new_data)
 
     def _update(self, new_data: dict) -> None:
