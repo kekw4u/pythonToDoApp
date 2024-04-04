@@ -21,13 +21,14 @@ class TodoJournal:
         name(str): Название туду листа
     """
 
+    shortcut_names = {"first": 0, "last": -1}
+
     def __init__(self, path_todo: str):
         """Конструктор класса: создаёт объект с заданными аттрибутами
 
         Args:
             path_todo(str): Путь до файла с туду листом
         """
-        self.shortcut_name = {"first": 0, "last": -1}
         self.path_todo = path_todo
         todo_data = self._parse()
         self.name = todo_data['name']

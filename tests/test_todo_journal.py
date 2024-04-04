@@ -1,6 +1,8 @@
 """
 Скрипт для тестирования ToDoJournal'а
 """
+import json
+
 from src.TodoJournal import TodoJournal
 
 
@@ -8,17 +10,21 @@ def test_init() -> None:
     """
     Функция тестирования TodoJournal'а
     """
-    expected_entries = []
-    expected_name = "test_todo"
+    test_create_journal("data/")
 
-    todo = TodoJournal("data/test_todo")
-    todo.add_entry("ads")
-    entries = todo.entries
-    name = todo.name
 
-    print(todo.first)
-    print(todo.first)
-    print(todo[0])
+def test_create_journal(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir+todo_filename
 
-    assert entries == expected_entries
-    assert name == expected_name
+    expected_todo = json.dumps(
+        {
+            "name": "test",
+            "todos": []
+        },
+        indent=4)
+
+    TodoJournal.create(todo, "test")
+    with open(todo, 'r', encoding='utf-8') as todoFile:
+        data = todoFile.read()
+    assert expected_todo == data
