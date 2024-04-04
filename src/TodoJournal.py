@@ -35,6 +35,7 @@ class TodoJournal:
         todo_data = self._parse()
         self.name = todo_data['name']
         self.entries = todo_data['todos']
+        self.shortcut_names = {"first" : 0, "last" : -1}
 
     @staticmethod
     def create(filename, name) -> None:
@@ -134,6 +135,14 @@ class TodoJournal:
             return self.entries[item]
         except (TypeError, IndexError) as error:
             raise ToDoNotFoundError("Туду с таким индексом не существует!") from error
+
+    def __getattr__(self, item):
+        index = self.shortcut_names.get(item)
+        if index is not None:
+            return self.entries[index]
+
+        cls = type(self)
+        raise AttributeError(f"{cls.__name__}-объект не имеет поля {item}")
 
     def __iter__(self):
         return iter(self.entries)
