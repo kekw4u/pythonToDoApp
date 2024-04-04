@@ -1,8 +1,4 @@
 """                 Приложение ToDoList
-
-Todo:
-    * Обработать исключение, если в метод удаления тудушки подаётся недопустимый индекс
-
 """
 
 import json
@@ -31,11 +27,11 @@ class TodoJournal:
         Args:
             path_todo(str): Путь до файла с туду листом
         """
+        self.shortcut_name = {"first": 0, "last": -1}
         self.path_todo = path_todo
         todo_data = self._parse()
         self.name = todo_data['name']
         self.entries = todo_data['todos']
-        self.shortcut_names = {"first" : 0, "last" : -1}
 
     @staticmethod
     def create(filename, name) -> None:
@@ -126,6 +122,14 @@ class TodoJournal:
         except PermissionError:
             print(f"У вас нет прав на чтение этого файла: {self.path_todo}")
             sys.exit(1)
+
+    def __setattr__(self, name, value):
+        error_msg = ''
+        if name in self.shortcut_names:
+            error_msg = f"readonly attribute {name}"
+        if error_msg:
+            raise AttributeError(error_msg)
+        super().__setattr__(name, value)
 
     def __len__(self):
         return len(self.entries)
