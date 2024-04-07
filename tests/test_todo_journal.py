@@ -2,7 +2,6 @@
 Скрипт для тестирования ToDoJournal'а
 """
 import json
-
 from src.TodoJournal import TodoJournal
 
 

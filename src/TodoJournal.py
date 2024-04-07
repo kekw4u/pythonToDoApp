@@ -1,4 +1,7 @@
 """                 Приложение ToDoList
+TODO:
+    * Тесты для __len__, add_entry, remove_entry
+    * Тесты с параметризацией (5 ПЗ)
 """
 
 import json
@@ -31,8 +34,8 @@ class TodoJournal:
         """
         self.path_todo = path_todo
         todo_data = self._parse()
-        self.name = todo_data['name']
-        self.entries = todo_data['todos']
+        self.name = todo_data["name"]
+        self.entries = todo_data["todos"]
 
     @staticmethod
     def create(filename, name) -> None:
@@ -154,3 +157,9 @@ class TodoJournal:
 
     def __next__(self):
         return next(self)
+
+    def __str__(self):
+        obj_str = f"\n----------{self.name}---------"
+        for index, todo in enumerate(self.entries):
+            obj_str += f"\n{index+1}. {todo}"
+        return obj_str
