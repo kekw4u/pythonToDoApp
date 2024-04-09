@@ -49,12 +49,10 @@ class TodoJournal:
                     indent=4,
                     ensure_ascii=False,
                 )
-        except FileNotFoundError:
-            print(f"Данный путь некорректен: {filename}")
-            sys.exit(1)
-        except PermissionError:
-            print(f"У вас нет прав на запись этого файла: {filename}")
-            sys.exit(1)
+        except FileNotFoundError as error:
+            raise FileNotFoundError(f"Данный путь некорректен: {filename}") from error
+        except PermissionError as error:
+            raise PermissionError(f"У вас нет прав на запись этого файла: {filename}") from error
 
     def add_entry(self, new_entry: str) -> None:
         """Добавляет новую тудушку в существующий туду лист

@@ -2,6 +2,9 @@
 Скрипт для тестирования ToDoJournal'а
 """
 import json
+
+import pytest
+
 from src.TodoJournal import TodoJournal
 
 
@@ -9,6 +12,12 @@ def test_init() -> None:
     """
     Функция тестирования TodoJournal'а
     """
+    test_create_journal_validpath("data/")
+    test_add_entry("data/")
+    test_len_method_empty_journal("data/")
+    test_len_method_two_entries_journal("data/")
+    test_create_journal_wrongpath("wrong/path/todo/")
+    test_create_journal_permissionerror("data/")
 
 
 def test_create_journal_validpath(tmpdir):
@@ -70,3 +79,19 @@ def test_len_method_two_entries_journal(tmpdir):
     todo_jrnl.add_entry("Тесты по питону")
     count_of_entries = len(todo_jrnl)
     assert expected_len == count_of_entries
+
+
+def test_create_journal_wrongpath(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir + todo_filename
+
+    with pytest.raises(FileNotFoundError):
+        TodoJournal.create(todo, "wrong_path")
+
+
+def test_create_journal_permissionerror(tmpdir):
+    todo_filename = "permission_error_file"
+    todo = tmpdir + todo_filename
+
+    with pytest.raises(PermissionError):
+        TodoJournal.create(todo, "permissionError")
