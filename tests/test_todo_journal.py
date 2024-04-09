@@ -19,6 +19,7 @@ def test_init() -> None:
     test_create_journal_wrongpath("wrong/path/todo/")
     test_create_journal_permissionerror("data/")
     test_remove_entry("data/")
+    test_remove_entry_wrongindex("data/")
 
 
 def test_create_journal_validpath(tmpdir):
@@ -121,7 +122,6 @@ def test_remove_entry(tmpdir):
     assert expected_todo == data
 
     todo_jrnl.remove_entry(0)
-
     expected_todo = json.dumps(
         {
             "name": "test",
@@ -132,3 +132,20 @@ def test_remove_entry(tmpdir):
     with open(todo, 'r', encoding='utf-8') as todoFile:
         data = todoFile.read()
     assert expected_todo == data
+
+
+def test_remove_entry_wrongindex(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir + todo_filename
+
+    TodoJournal.create(todo, "test")
+    todo_jrnl = TodoJournal(todo)
+    todo_jrnl.add_entry("Сходить за молоком")
+    todo_jrnl.add_entry("Убраться дома")
+
+    todo_jrnl.remove_entry(10)
+    todo_jrnl.remove_entry(4.5)
+    expected_len = 2
+    len_after_remove = len(todo_jrnl)
+
+    assert expected_len == len_after_remove
