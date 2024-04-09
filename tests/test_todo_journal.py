@@ -18,6 +18,7 @@ def test_init() -> None:
     test_len_method_two_entries_journal("data/")
     test_create_journal_wrongpath("wrong/path/todo/")
     test_create_journal_permissionerror("data/")
+    test_remove_entry("data/")
 
 
 def test_create_journal_validpath(tmpdir):
@@ -95,3 +96,39 @@ def test_create_journal_permissionerror(tmpdir):
 
     with pytest.raises(PermissionError):
         TodoJournal.create(todo, "permissionError")
+
+
+def test_remove_entry(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir + todo_filename
+
+    TodoJournal.create(todo, "test")
+    todo_jrnl = TodoJournal(todo)
+    todo_jrnl.add_entry("Сходить за молоком")
+    todo_jrnl.add_entry("Убраться дома")
+
+    expected_todo = json.dumps(
+        {
+            "name": "test",
+            "todos": ["Сходить за молоком",
+                      "Убраться дома"]
+        },
+        indent=4,
+        ensure_ascii=False, )
+
+    with open(todo, 'r', encoding='utf-8') as todoFile:
+        data = todoFile.read()
+    assert expected_todo == data
+
+    todo_jrnl.remove_entry(0)
+
+    expected_todo = json.dumps(
+        {
+            "name": "test",
+            "todos": ["Убраться дома"]
+        },
+        indent=4,
+        ensure_ascii=False,)
+    with open(todo, 'r', encoding='utf-8') as todoFile:
+        data = todoFile.read()
+    assert expected_todo == data
