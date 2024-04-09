@@ -20,6 +20,8 @@ def test_init() -> None:
     test_create_journal_permissionerror("data/")
     test_remove_entry("data/")
     test_remove_entry_wrongindex("data/")
+    test_set_attr("data/")
+    test_set_attr_exception("data/")
 
 
 def test_create_journal_validpath(tmpdir):
@@ -128,7 +130,7 @@ def test_remove_entry(tmpdir):
             "todos": ["Убраться дома"]
         },
         indent=4,
-        ensure_ascii=False,)
+        ensure_ascii=False, )
     with open(todo, 'r', encoding='utf-8') as todoFile:
         data = todoFile.read()
     assert expected_todo == data
@@ -149,3 +151,26 @@ def test_remove_entry_wrongindex(tmpdir):
     len_after_remove = len(todo_jrnl)
 
     assert expected_len == len_after_remove
+
+
+def test_set_attr(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir + todo_filename
+
+    TodoJournal.create(todo, "test")
+    todo_jrnl = TodoJournal(todo)
+
+    todo_jrnl.tempAttr = "justForTest"
+    expected_attr = "justForTest"
+
+    assert expected_attr == todo_jrnl.tempAttr
+
+
+def test_set_attr_exception(tmpdir):
+    todo_filename = "test_todo"
+    todo = tmpdir + todo_filename
+
+    TodoJournal.create(todo, "test")
+    todo_jrnl = TodoJournal(todo)
+    with pytest.raises(AttributeError):
+        todo_jrnl.first = "justForTest"
