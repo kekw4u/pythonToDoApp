@@ -1,6 +1,5 @@
 """                 Приложение ToDoList
 TODO:
-    * Тесты для __len__, add_entry, remove_entry
     * Тесты с параметризацией (5 ПЗ)
 """
 
