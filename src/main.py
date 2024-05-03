@@ -4,31 +4,8 @@
 
 import sys
 
-from src.TodoJournal import TodoJournal
-
-
-def parse_args(_cli_args):
-    """
-    Обработка аргументов командной строки
-    Args:
-        _cli_args:
-
-    Returns:
-
-    """
-    return []
-
-
-def run(_args):
-    """
-    Вызываем соответствующие функции
-    Args:
-        _args:
-
-    Returns:
-
-    """
-    return None
+from src.args import parse_args
+from src.todo import run
 
 
 def main():
@@ -42,3 +19,6 @@ def main():
     except Exception as error:
         print(error)
         return 1
+
+
+main()
